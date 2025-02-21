@@ -1,0 +1,114 @@
+name: Web CI
+
+on:
+  push:
+    branches: [main]
+    paths: ['src/web/**']
+  pull_request:
+    branches: [main]
+    paths: ['src/web/**']
+
+env:
+  NODE_VERSION: '18.x'
+  CACHE_KEY: "npm-deps-${{ hashFiles('**/package-lock.json') }}"
+  CYPRESS_CACHE_KEY: "cypress-binary-${{ hashFiles('**/package-lock.json') }}"
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: src/web
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: src/web/package-lock.json
+
+      - name: Cache Dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            node_modules/.cache
+            ~/.cache/Cypress
+          key: ${{ env.CACHE_KEY }}
+          restore-keys: |
+            npm-deps-
+
+      - name: Cache Cypress Binary
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ env.CYPRESS_CACHE_KEY }}
+          restore-keys: |
+            cypress-binary-
+
+      - name: Install Dependencies
+        run: npm ci --prefer-offline
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+
+      - name: Type Check
+        run: npm run type-check
+        
+      - name: Lint
+        run: npm run lint
+
+      - name: Run Unit Tests
+        run: npm run test:unit -- --coverage
+        env:
+          CI: true
+
+      - name: Install Cypress Binary
+        run: npx cypress install
+
+      - name: Run E2E Tests
+        run: npm run test:e2e
+        env:
+          CI: true
+        timeout-minutes: 15
+
+      - name: Build Production
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: src/web/dist
+          retention-days: 7
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: |
+            src/web/coverage
+            src/web/cypress/videos
+            src/web/cypress/screenshots
+          retention-days: 7
+
+      - name: Upload Coverage Reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: coverage-report
+          path: src/web/coverage
+          retention-days: 7
