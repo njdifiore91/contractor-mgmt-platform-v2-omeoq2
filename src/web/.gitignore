@@ -1,0 +1,78 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+.temp/
+
+# Quasar Framework
+.quasar/
+.quasar-ide-helper/
+.quasar-typescript/
+
+# Environment files
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# Test and coverage
+coverage/
+e2e-reports/
+/test/unit/coverage/
+/test/e2e/reports/
+.nyc_output/
+
+# IDE - VSCode
+.vscode/
+.history/
+
+# IDE - JetBrains
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# IDE - Atom
+.atom/
+
+# IDE - Sublime
+*.sublime-workspace
+*.sublime-project
+
+# IDE - Visual Studio
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Editor backup files
+*.sw?
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Local files
+*.local
+
+# Cache directories
+.cache/
+.npm/
+.yarn/
+
+# Optional: Project specific ignores
+# Add any project-specific files or directories that should be ignored
