@@ -1,0 +1,141 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environment": {
+            "value": "dev"
+        },
+        "location": {
+            "value": "eastus"
+        },
+        "appServicePlan": {
+            "value": {
+                "name": "asp-inspector-dev",
+                "sku": {
+                    "name": "B1",
+                    "tier": "Basic",
+                    "size": "B1",
+                    "family": "B",
+                    "capacity": 1
+                },
+                "tags": {
+                    "environment": "development",
+                    "application": "inspector",
+                    "managedBy": "bicep"
+                }
+            }
+        },
+        "webApp": {
+            "value": {
+                "name": "app-inspector-web-dev",
+                "dockerImage": "inspector-web",
+                "dockerImageTag": "latest",
+                "alwaysOn": true,
+                "ftpsState": "Disabled",
+                "http20Enabled": true,
+                "minTlsVersion": "1.2",
+                "appSettings": {
+                    "DOCKER_REGISTRY_SERVER_URL": "https://crinspectordev.azurecr.io",
+                    "WEBSITES_PORT": "80",
+                    "NODE_ENV": "development"
+                },
+                "tags": {
+                    "component": "frontend",
+                    "framework": "vuejs"
+                }
+            }
+        },
+        "apiApp": {
+            "value": {
+                "name": "app-inspector-api-dev",
+                "dockerImage": "inspector-api",
+                "dockerImageTag": "latest",
+                "alwaysOn": true,
+                "ftpsState": "Disabled",
+                "http20Enabled": true,
+                "minTlsVersion": "1.2",
+                "appSettings": {
+                    "DOCKER_REGISTRY_SERVER_URL": "https://crinspectordev.azurecr.io",
+                    "WEBSITES_PORT": "80",
+                    "ASPNETCORE_ENVIRONMENT": "Development"
+                },
+                "tags": {
+                    "component": "backend",
+                    "framework": "aspnetcore"
+                }
+            }
+        },
+        "sqlServer": {
+            "value": {
+                "name": "sql-inspector-dev",
+                "administratorLogin": "sqladmin",
+                "databaseName": "InspectorDb",
+                "skuName": "Basic",
+                "skuTier": "Basic",
+                "maxSizeBytes": 2147483648,
+                "zoneRedundant": false,
+                "enableAzureADAuth": true,
+                "minimalTlsVersion": "1.2",
+                "publicNetworkAccess": "Enabled",
+                "tags": {
+                    "component": "database",
+                    "engine": "sqlserver"
+                }
+            }
+        },
+        "storageAccount": {
+            "value": {
+                "name": "stinspectordev",
+                "sku": "Standard_LRS",
+                "kind": "StorageV2",
+                "accessTier": "Hot",
+                "allowBlobPublicAccess": false,
+                "minimumTlsVersion": "TLS1_2",
+                "supportsHttpsTrafficOnly": true,
+                "containers": [
+                    "inspector-files",
+                    "backups",
+                    "onedrive-sync"
+                ],
+                "tags": {
+                    "component": "storage",
+                    "purpose": "files"
+                }
+            }
+        },
+        "keyVault": {
+            "value": {
+                "name": "kv-inspector-dev",
+                "sku": "standard",
+                "enabledForDeployment": true,
+                "enabledForTemplateDeployment": true,
+                "enabledForDiskEncryption": true,
+                "enableRbacAuthorization": true,
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 7,
+                "networkAcls": {
+                    "defaultAction": "Allow",
+                    "bypass": "AzureServices"
+                },
+                "tags": {
+                    "component": "security",
+                    "purpose": "secrets"
+                }
+            }
+        },
+        "containerRegistry": {
+            "value": {
+                "name": "crinspectordev",
+                "sku": "Basic",
+                "adminUserEnabled": true,
+                "anonymousPullEnabled": false,
+                "networkRuleBypassOptions": "AzureServices",
+                "zoneRedundancy": "Disabled",
+                "tags": {
+                    "component": "registry",
+                    "purpose": "containers"
+                }
+            }
+        }
+    }
+}
