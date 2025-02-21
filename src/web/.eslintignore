@@ -1,0 +1,33 @@
+# Distribution files
+dist/**
+
+# Dependencies
+node_modules/**
+
+# Test coverage reports
+coverage/**
+.coverage/**
+
+# Static assets
+public/**
+
+# Minified files
+*.min.js
+
+# Configuration files (except ESLint config)
+*.config.js
+!.eslintrc.js
+
+# Build configuration
+vite.config.ts
+
+# TypeScript declarations
+env.d.ts
+shims-vue.d.ts
+*.d.ts
+
+# Quasar framework artifacts
+.quasar/**
+
+# Bundle analysis
+stats.html
