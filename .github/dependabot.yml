@@ -1,0 +1,66 @@
+# Dependabot version 2 configuration file
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+
+updates:
+  # Frontend (npm) dependency updates
+  - package-ecosystem: "npm"
+    directory: "/src/web"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "frontend"
+    reviewers:
+      - "CODEOWNERS"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # Backend (.NET) dependency updates
+  - package-ecosystem: "nuget"
+    directory: "/src/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "backend"
+    reviewers:
+      - "CODEOWNERS"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # Infrastructure (Terraform) dependency updates
+  - package-ecosystem: "terraform"
+    directory: "/infrastructure/terraform"
+    schedule:
+      interval: "monthly"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "infrastructure"
+    reviewers:
+      - "CODEOWNERS"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # GitHub Actions workflow dependency updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "ci-cd"
+    reviewers:
+      - "CODEOWNERS"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
