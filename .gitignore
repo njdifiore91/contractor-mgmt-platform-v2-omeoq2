@@ -1,0 +1,75 @@
+# OS Files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# IDE
+.idea/
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Environment
+.env
+.env.local
+.env.*.local
+appsettings.*.json
+secrets.json
+connection.json
+
+# Dependencies
+node_modules/
+packages/
+bin/
+obj/
+
+# Build outputs
+dist/
+build/
+.sourcemaps/
+.hot-reload/
+
+# Database
+*.mdf
+*.ldf
+*.ndf
+*.bak
+*.backup
+
+# Testing and coverage
+coverage/
+TestResults/
+*.trx
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# Secrets
+*.pfx
+*.key
+*.pem
+*.cert
+*.p12
+
+# Azure
+.azure/
+*.pubxml
+*.publishsettings
+*.azurePubxml
+
+# OneDrive
+.onedrive-*/
+*.odtemp
+*.odopen
+
+# Infrastructure
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
