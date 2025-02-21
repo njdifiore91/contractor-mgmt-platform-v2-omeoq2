@@ -1,0 +1,92 @@
+# Prometheus Configuration v2.45.0
+# Comprehensive monitoring configuration for application infrastructure and services
+
+global:
+  # Global settings for all scrape targets
+  scrape_interval: 15s      # How frequently to scrape targets
+  evaluation_interval: 15s  # How frequently to evaluate rules
+  scrape_timeout: 10s      # Timeout for scrape requests
+  external_labels:         # Labels added to any time series or alerts
+    environment: ${ENV:production}
+    region: ${REGION:us-east}
+  query_log_file: /var/log/prometheus/query.log
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+      timeout: 5s
+      api_version: v2
+      scheme: https
+      tls_config:
+        cert_file: /etc/prometheus/certs/client.crt
+        key_file: /etc/prometheus/certs/client.key
+        ca_file: /etc/prometheus/certs/ca.crt
+
+# Rule files specifying alert conditions
+rule_files:
+  - alert-rules.yml
+
+# Scrape configurations for monitoring targets
+scrape_configs:
+  # ASP.NET Core Backend API monitoring
+  - job_name: backend_api
+    metrics_path: /metrics
+    scheme: https
+    tls_config:
+      cert_file: /etc/prometheus/certs/client.crt
+      key_file: /etc/prometheus/certs/client.key
+      ca_file: /etc/prometheus/certs/ca.crt
+    azure_sd_configs:
+      - subscription_id: ${AZURE_SUBSCRIPTION_ID}
+        tenant_id: ${AZURE_TENANT_ID}
+        client_id: ${AZURE_CLIENT_ID}
+        client_secret: ${AZURE_CLIENT_SECRET}
+        refresh_interval: 30s
+        port: 80
+    relabel_configs:
+      - source_labels: [__meta_azure_machine_name]
+        target_label: instance
+
+  # VueJS Frontend monitoring
+  - job_name: web_frontend
+    metrics_path: /metrics
+    scheme: https
+    tls_config:
+      cert_file: /etc/prometheus/certs/client.crt
+      key_file: /etc/prometheus/certs/client.key
+      ca_file: /etc/prometheus/certs/ca.crt
+    azure_sd_configs:
+      - subscription_id: ${AZURE_SUBSCRIPTION_ID}
+        tenant_id: ${AZURE_TENANT_ID}
+        client_id: ${AZURE_CLIENT_ID}
+        client_secret: ${AZURE_CLIENT_SECRET}
+        refresh_interval: 30s
+        port: 80
+
+  # SQL Server monitoring
+  - job_name: sql_server
+    metrics_path: /metrics
+    scheme: https
+    basic_auth:
+      username: ${SQL_EXPORTER_USER}
+      password: ${SQL_EXPORTER_PASSWORD}
+    static_configs:
+      - targets: ['sql-exporter:9399']
+
+  # Azure infrastructure metrics
+  - job_name: azure_metrics
+    metrics_path: /metrics
+    scheme: https
+    azure_sd_configs:
+      - subscription_id: ${AZURE_SUBSCRIPTION_ID}
+        tenant_id: ${AZURE_TENANT_ID}
+        client_id: ${AZURE_CLIENT_ID}
+        client_secret: ${AZURE_CLIENT_SECRET}
+        refresh_interval: 30s
+    relabel_configs:
+      - source_labels: [__meta_azure_resource_group]
+        target_label: resource_group
+      - source_labels: [__meta_azure_resource_name]
+        target_label: resource_name
