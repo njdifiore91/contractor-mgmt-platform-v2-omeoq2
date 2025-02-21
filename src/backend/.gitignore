@@ -1,0 +1,145 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio files
+.vs/
+.vscode/
+.idea/
+_ReSharper*/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# IDE cache/options directories
+[Tt]emp/
+.vs/
+.vscode/
+.idea/
+_ReSharper*/
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# NuGet Packages
+*.nupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Configuration and secrets
+appsettings.Development.json
+appsettings.Staging.json
+appsettings.Production.json
+!appsettings.json
+secrets.json
+.env
+*.pfx
+*.key
+*.[Pp]assword*
+*.[Ss]ecret*
+
+# SQL Server files
+*.mdf
+*.ldf
+*.ndf
+*.bak
+
+# Azure deployment
+*.pubxml
+*.azurePubxml
+*.publishsettings
+
+# Test Results
+TestResults/
+[Cc]overage/
+coverage.json
+coverage.cobertura.xml
+*.coverage
+*.coveragexml
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.swp
+*.*~
+*.~*
+~*
+
+# Node.js (if used in backend tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Code coverage and quality tools
+.sonarqube/
+.scannerwork/
+
+# Documentation
+docs/_build/
+
+# Backup files
+*.orig
+*.bak
+*.backup
+
+# Certificate files
+*.cer
+*.pem
+*.crt
+
+# Local development overrides
+override.json
+local.settings.json
+
+# Build and deployment artifacts
+[Pp]ublish/
+[Pp]ublished/
+*.deploy
+*.rdl.data
