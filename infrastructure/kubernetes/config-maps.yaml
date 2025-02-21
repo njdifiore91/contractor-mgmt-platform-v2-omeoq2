@@ -1,0 +1,54 @@
+apiVersion: v1
+configurations:
+  backend:
+    metadata:
+      name: backend-config
+      namespace: production
+    data:
+      logging:
+        logLevel:
+          default: Information
+          microsoft: Warning
+          microsoftHostingLifetime: Information
+      allowedHosts: "*"
+      jwtSettings:
+        issuer: https://api.inspectorapp.com
+        audience: inspector-app-users
+        expirationHours: "24"
+      emailSettings:
+        smtpServer: smtp.office365.com
+        smtpPort: "587"
+        enableSsl: "true"
+        defaultFromEmail: notifications@inspectorapp.com
+        defaultFromName: Inspector Management System
+      oneDriveSettings:
+        baseFolder: /InspectorFiles
+      corsSettings:
+        allowedOrigins:
+          - https://app.inspectorapp.com
+          - https://admin.inspectorapp.com
+      databaseSettings:
+        commandTimeout: "30"
+        enableDetailedErrors: "false"
+        enableSensitiveDataLogging: "false"
+      featureSettings:
+        enableOneDriveIntegration: "true"
+        enableEmailNotifications: "true"
+        enableVirtualScrolling: "true"
+  
+  web:
+    metadata:
+      name: web-config
+      namespace: production
+    data:
+      vueAppApiUrl: https://api.inspectorapp.com
+      vueAppTitle: Inspector Management System
+      vueAppOneDriveEnabled: "true"
+      vueAppDefaultPageSize: "50"
+      vueAppEnableVirtualScroll: "true"
+      vueAppAutoRefreshInterval: "300000"
+      vueAppEnableDrugTestModule: "true"
+      vueAppEnableEquipmentTracking: "true"
+      vueAppEnableInspectorSearch: "true"
+      vueAppOneDriveBasePath: /InspectorFiles
+      vueAppEnableEmailTemplates: "true"
