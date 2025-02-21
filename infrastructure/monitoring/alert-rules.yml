@@ -1,0 +1,107 @@
+# Prometheus Alert Rules Configuration v2.45.0
+# Comprehensive monitoring rules for application components and infrastructure
+
+groups:
+  # Backend API Monitoring
+  - name: backend_alerts
+    rules:
+      - alert: BackendApiDown
+        expr: up{job='backend_api'} == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: Backend API is down
+          description: Backend API has been down for more than 5 minutes
+          runbook_url: https://wiki/runbooks/backend-down
+
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~'5.*'}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High error rate detected
+          description: Error rate is above 10% for the last 5 minutes
+          dashboard: https://grafana/error-analysis
+
+      - alert: HighResponseTime
+        expr: http_server_requests_seconds{quantile='0.95'} > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High API response time
+          description: 95th percentile of response time is above 1 second
+
+      - alert: ApiRateLimitNearing
+        expr: rate(api_rate_limit_current[5m]) / api_rate_limit_max > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: API rate limit threshold warning
+          description: API rate limit utilization above 80%
+
+  # Authentication Security Monitoring
+  - name: authentication_alerts
+    rules:
+      - alert: HighLoginFailureRate
+        expr: rate(auth_login_failures_total[15m]) > 10
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: High login failure rate
+          description: More than 10 login failures per minute detected
+
+      - alert: SuspiciousAuthPatterns
+        expr: rate(auth_suspicious_patterns_total[5m]) > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: Suspicious authentication patterns detected
+          description: Potential security breach attempt detected
+
+  # Database Health and Backup Monitoring
+  - name: database_alerts
+    rules:
+      - alert: DatabaseBackupFailed
+        expr: mssql_backup_status != 1
+        for: 1h
+        labels:
+          severity: critical
+        annotations:
+          summary: Database backup failure
+          description: Database backup has failed or is incomplete
+
+      - alert: DatabaseBackupAge
+        expr: time() - mssql_backup_last_timestamp > 86400
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: Database backup too old
+          description: Last successful backup is over 24 hours old
+
+  # SSL Certificate Monitoring
+  - name: ssl_certificate_alerts
+    rules:
+      - alert: SSLCertificateExpiringSoon
+        expr: ssl_certificate_expiry_days < 30
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: SSL Certificate expiring soon
+          description: SSL Certificate will expire in less than 30 days
+
+      - alert: SSLCertificateInvalid
+        expr: ssl_certificate_valid == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: SSL Certificate invalid
+          description: SSL Certificate validation check failed
