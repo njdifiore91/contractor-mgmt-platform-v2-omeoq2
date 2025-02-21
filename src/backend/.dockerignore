@@ -1,0 +1,59 @@
+# Version control
+.git
+.gitignore
+
+# IDE/Editor directories
+.vs
+.vscode
+
+# Build outputs
+*/bin
+*/obj
+
+# User-specific files
+**/*.user
+**/*.dbmdl
+**/*.jfm
+**/*.suo
+**/*.cache
+
+# Environment and configuration
+**/appsettings.*.json
+**/.env*
+**/Properties/launchSettings.json
+**/*.Development.*
+**/*.Local.*
+**/*.Development.json
+
+# Dependencies
+**/node_modules
+**/.toolstarget
+
+# Testing
+**/[Tt]ests
+**/[Tt]est[Rr]esults
+
+# Documentation
+**/*.md
+LICENSE
+
+# Security and sensitive data
+**/[Ss]ecrets*
+**/*.key
+**/*.pfx
+**/*.pem
+**/[Ll]ogs/
+
+# Docker files
+Dockerfile
+docker-compose*.yml
+
+# Debug and release artifacts
+**/[Dd]ebug/
+**/[Rr]elease/
+
+# Log files
+**/*.log
+
+# Temporary and cache files
+**/*.cache
