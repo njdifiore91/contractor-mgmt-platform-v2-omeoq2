@@ -1,0 +1,158 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-api
+  labels:
+    app: backend-api
+    environment: production
+    tier: backend
+  annotations:
+    description: "ASP.NET Core backend deployment for Inspector Management System"
+    kubernetes.io/change-cause: "Initial deployment"
+
+spec:
+  # Target 5 replicas with autoscaling between 3-10
+  replicas: 5
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  selector:
+    matchLabels:
+      app: backend-api
+      environment: production
+
+  template:
+    metadata:
+      labels:
+        app: backend-api
+        environment: production
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
+        prometheus.io/path: "/metrics"
+
+    spec:
+      # Security Context for enhanced security
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+        runAsNonRoot: true
+
+      # Container specifications
+      containers:
+        - name: backend-api
+          # Using Microsoft's official ASP.NET runtime image - v7.0
+          image: "#{acr-name}#/backend-api:#{version}#"
+          imagePullPolicy: Always
+
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+
+          # Resource allocation
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "2000m"
+              memory: "2Gi"
+
+          # Health checks
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          startupProbe:
+            httpGet:
+              path: /health/startup
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 30
+
+          # Environment variables from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: backend-config
+
+          # Volume mounts
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config
+              readOnly: true
+            - name: secrets-volume
+              mountPath: /app/secrets
+              readOnly: true
+            - name: ssl-certs
+              mountPath: /app/ssl
+              readOnly: true
+            - name: temp-storage
+              mountPath: /app/temp
+
+      # Volume definitions
+      volumes:
+        - name: config-volume
+          configMap:
+            name: backend-config
+        - name: secrets-volume
+          secret:
+            secretName: backend-secrets
+        - name: ssl-certs
+          secret:
+            secretName: ssl-certificates
+        - name: temp-storage
+          emptyDir: {}
+
+      # Pod termination grace period
+      terminationGracePeriodSeconds: 60
+
+---
+# HorizontalPodAutoscaler for dynamic scaling
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: backend-api-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
