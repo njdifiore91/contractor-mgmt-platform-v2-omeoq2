@@ -1,0 +1,121 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environment": {
+            "value": "prod"
+        },
+        "location": {
+            "value": "eastus2"
+        },
+        "appServicePlan": {
+            "value": {
+                "sku": {
+                    "name": "P1v2",
+                    "tier": "PremiumV2",
+                    "size": "P1v2",
+                    "family": "Pv2",
+                    "capacity": 1
+                },
+                "autoscaleEnabled": true,
+                "autoscaleMin": 1,
+                "autoscaleMax": 5,
+                "zoneRedundant": true
+            }
+        },
+        "sqlServer": {
+            "value": {
+                "sku": {
+                    "name": "Standard",
+                    "tier": "Standard",
+                    "capacity": 50
+                },
+                "administratorLogin": "[parameters('sqlAdminUsername')]",
+                "minimalTlsVersion": "1.2",
+                "publicNetworkAccess": "Disabled",
+                "backupRetentionDays": 35,
+                "geoRedundantBackup": "Enabled",
+                "zoneRedundant": true,
+                "highAvailabilityReplicas": 2
+            }
+        },
+        "storageAccount": {
+            "value": {
+                "sku": {
+                    "name": "Standard_LRS"
+                },
+                "kind": "StorageV2",
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": false,
+                "networkAcls": {
+                    "defaultAction": "Deny",
+                    "bypass": "AzureServices"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "enableHierarchicalNamespace": true,
+                "encryption": {
+                    "keySource": "Microsoft.KeyVault",
+                    "requireInfrastructureEncryption": true
+                }
+            }
+        },
+        "keyVault": {
+            "value": {
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "enableRbacAuthorization": true,
+                "enablePurgeProtection": true,
+                "softDeleteRetentionInDays": 90,
+                "networkAcls": {
+                    "defaultAction": "Deny",
+                    "bypass": "AzureServices"
+                },
+                "enabledForTemplateDeployment": true,
+                "enabledForDiskEncryption": true,
+                "enabledForDeployment": true
+            }
+        },
+        "containerRegistry": {
+            "value": {
+                "sku": {
+                    "name": "Premium"
+                },
+                "adminUserEnabled": false,
+                "networkAcls": {
+                    "defaultAction": "Deny",
+                    "bypass": "AzureServices"
+                },
+                "policies": {
+                    "quarantinePolicy": {
+                        "status": "enabled"
+                    },
+                    "trustPolicy": {
+                        "type": "Notary",
+                        "status": "enabled"
+                    },
+                    "retentionPolicy": {
+                        "days": 30,
+                        "status": "enabled"
+                    }
+                },
+                "encryption": {
+                    "status": "enabled"
+                },
+                "zoneRedundancy": "Enabled",
+                "dataEndpointEnabled": true,
+                "publicNetworkAccess": "Disabled"
+            }
+        },
+        "tags": {
+            "value": {
+                "Environment": "Production",
+                "CostCenter": "IT-PROD",
+                "Application": "InspectorTracker",
+                "DataClassification": "Confidential",
+                "BusinessCriticality": "High"
+            }
+        }
+    }
+}
