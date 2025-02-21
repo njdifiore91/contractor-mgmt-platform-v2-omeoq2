@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=db;Database=InspectorDB;User=sa;Password=Dev_Password_123;TrustServerCertificate=True
+      - AzureAd__Instance=https://login.microsoftonline.com/
+      - AzureAd__TenantId=development-tenant-id
+      - AzureAd__ClientId=development-client-id
+      - Email__SmtpServer=smtp.office365.com
+      - Email__SmtpPort=587
+      - Email__UseSsl=true
+      - Email__DefaultSender=noreply@development.com
+      - OneDrive__BaseUrl=https://graph.microsoft.com/v1.0
+      - OneDrive__Scopes=Files.ReadWrite.All
+      - Logging__LogLevel__Default=Debug
+      - Logging__LogLevel__Microsoft=Information
+    ports:
+      - "5000:80"
+      - "5001:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ./src:/app/src
+    entrypoint: ["/bin/sh", "-c", "dotnet watch run --no-restore"]
+
+  db:
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Dev_Password_123
+      - MSSQL_PID=Developer
+      - MSSQL_MEMORY_LIMIT_MB=4096
+      - MSSQL_ENABLE_HADR=0
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+      - ./scripts/init:/docker-entrypoint-initdb.d
+    command:
+      - /opt/mssql/bin/sqlservr
+      - --accept-eula
+      - --reset-sa-password
+
+volumes:
+  sqldata:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/sqlserver
+      o: bind
