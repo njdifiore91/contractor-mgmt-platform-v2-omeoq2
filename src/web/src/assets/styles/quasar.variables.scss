@@ -1,0 +1,84 @@
+// @package sass ^1.32.0
+// @package @quasar/framework ^2.0.0
+
+// Core Colors
+$primary   : rgb(33, 150, 243);    // Main brand color
+$secondary : rgb(96, 125, 139);    // Secondary brand color
+$accent    : rgb(255, 64, 129);    // Accent color for highlights
+$dark      : rgb(33, 33, 33);      // Dark theme color
+
+// State Colors
+$positive  : rgb(76, 175, 80);     // Success state
+$negative  : rgb(244, 67, 54);     // Error state
+$info      : rgb(33, 150, 243);    // Information state
+$warning   : rgb(255, 152, 0);     // Warning state
+
+// Typography
+$body-font-family: 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$body-font-size: 14px;
+$body-line-height: 1.5;
+
+// Spacing System
+$space-base: 16px;
+$space-x-small: 4px;
+$space-small: 8px;
+$space-medium: 16px;
+$space-large: 24px;
+$space-x-large: 32px;
+
+// Breakpoints for Responsive Design
+$breakpoint-xs: 599px;    // Extra small devices
+$breakpoint-sm: 1023px;   // Small devices
+$breakpoint-md: 1439px;   // Medium devices
+$breakpoint-lg: 1919px;   // Large devices
+
+// Elevation/Shadow System
+$shadow-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);   // Light elevation
+$shadow-2: 0 3px 6px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.12);   // Medium elevation
+$shadow-3: 0 10px 20px rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.10); // Heavy elevation
+
+// Table Styling
+$table-border: 1px solid rgba(0, 0, 0, 0.12);
+$table-header-bg: rgb(245, 245, 245);
+$table-row-hover: rgba(0, 0, 0, 0.03);
+$table-virtual-scroll-item-height: 48px;
+
+// Dialog Styling
+$dialog-backdrop: rgba(0, 0, 0, 0.4);
+$dialog-max-height: 90vh;
+$dialog-min-width: 280px;
+$dialog-padding: 24px;
+
+// Form Elements
+$form-border: 1px solid rgba(0, 0, 0, 0.24);
+$form-border-radius: 4px;
+$form-label-size: 12px;
+$form-padding: 12px;
+
+// Button Styling
+$btn-border-radius: 4px;
+$btn-padding: 8px 16px;
+$btn-mobile-padding: 12px 16px;
+
+// Navigation
+$nav-drawer-width: 256px;
+$nav-drawer-mobile-width: 100%;
+$nav-item-height: 48px;
+$nav-item-mobile-height: 56px;
+
+// List Components
+$list-item-height: 48px;
+$list-item-mobile-height: 56px;
+$list-virtual-scroll-threshold: 100;
+
+// Make sure Quasar picks up our custom variables
+:root {
+  --q-primary: #{$primary};
+  --q-secondary: #{$secondary};
+  --q-accent: #{$accent};
+  --q-dark: #{$dark};
+  --q-positive: #{$positive};
+  --q-negative: #{$negative};
+  --q-info: #{$info};
+  --q-warning: #{$warning};
+}
