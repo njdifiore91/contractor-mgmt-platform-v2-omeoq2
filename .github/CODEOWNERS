@@ -1,0 +1,49 @@
+# Unless a later match takes precedence, these owners will be requested for review
+* @project-maintainers
+
+# Backend related files
+/src/backend/**/* @backend-team @senior-developers
+/src/backend/src/Backend.Core/**/* @backend-architects @senior-developers
+/src/backend/src/Backend.API/**/* @backend-team @api-reviewers
+/src/backend/Controllers/**/* @backend-team @api-reviewers
+
+# Frontend related files
+/src/web/**/* @frontend-team @ui-reviewers
+/src/web/src/components/**/* @frontend-team @ui-architects
+/src/web/src/views/**/* @frontend-team @ui-architects
+/src/web/src/layouts/**/* @frontend-team @ui-architects
+
+# Infrastructure and deployment
+/infrastructure/**/* @devops-team @infrastructure-architects
+/deployment/**/* @devops-team @infrastructure-architects
+/docker/**/* @devops-team @infrastructure-architects
+
+# GitHub workflows and CI/CD
+/.github/workflows/* @devops-team @ci-cd-reviewers
+
+# Test files
+**/tests/**/* @qa-team @test-automation-engineers
+**/*.spec.ts @qa-team @test-automation-engineers
+**/*.test.ts @qa-team @test-automation-engineers
+**/*Tests.cs @qa-team @test-automation-engineers
+**/*Testing.cs @qa-team @test-automation-engineers
+
+# Security and authentication related files
+**/Auth/**/* @security-team @senior-developers @security-architects
+**/Security/**/* @security-team @senior-developers @security-architects
+**/Permissions/**/* @security-team @senior-developers @security-architects
+**/Identity/**/* @security-team @senior-developers @security-architects
+**/*Auth*.ts @security-team @senior-developers @security-architects
+**/*Auth*.cs @security-team @senior-developers @security-architects
+**/*Security*.ts @security-team @senior-developers @security-architects
+**/*Security*.cs @security-team @senior-developers @security-architects
+
+# Data access and models
+**/Data/**/* @backend-team @data-architects
+**/Models/**/* @backend-team @data-architects
+**/Repositories/**/* @backend-team @data-architects
+**/EntityFramework/**/* @backend-team @data-architects
+
+# Documentation
+**/*.md @technical-writers @project-maintainers
+/docs/**/* @technical-writers @project-maintainers
