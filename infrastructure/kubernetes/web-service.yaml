@@ -1,0 +1,33 @@
+# Kubernetes Service configuration for Vue.js web frontend application
+# Provides internal load balancing and service discovery
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  labels:
+    app: inspector-web
+    tier: frontend
+  annotations:
+    description: "Service for Inspector Management Web Frontend"
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"  # Since hosted on Azure
+spec:
+  # Using ClusterIP for internal access within the cluster
+  type: ClusterIP
+  
+  # Port configuration for HTTP traffic
+  ports:
+    - name: http
+      port: 80  # Service port
+      targetPort: 80  # Container port
+      protocol: TCP
+      
+  # Selector to match pods with the Vue.js web application
+  selector:
+    app: inspector-web
+    tier: frontend
+    
+  # Session affinity configuration
+  sessionAffinity: None
+  
+  # Publishing not required since using ClusterIP
+  publishNotReadyAddresses: false
