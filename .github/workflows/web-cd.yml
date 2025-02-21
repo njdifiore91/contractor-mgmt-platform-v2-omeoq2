@@ -1,0 +1,98 @@
+name: Web CD
+
+# Only trigger on push to main branch and changes in web directory
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/web/**'
+
+# Ensure only one deployment runs at a time
+concurrency:
+  group: production
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '18.x'
+  AZURE_WEBAPP_NAME: 'inspector-management-web'
+  AZURE_WEBAPP_PACKAGE_PATH: 'src/web/dist'
+  DEPLOYMENT_TIMEOUT: '10m'
+  MAX_DEPLOYMENT_ATTEMPTS: '3'
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3 # v3.5.3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v3 # v3.7.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'src/web/package-lock.json'
+
+      - name: Cache Dependencies
+        uses: actions/cache@v3 # v3.3.1
+        with:
+          path: |
+            src/web/node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('src/web/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        working-directory: src/web
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Build Application
+        working-directory: src/web
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Azure Login
+        uses: azure/login@v1 # v1.4.6
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2 # v2.2.10
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          slot-name: production
+
+      - name: Health Check
+        run: |
+          max_attempts=${{ env.MAX_DEPLOYMENT_ATTEMPTS }}
+          attempt=1
+          until curl -f https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net/health || [ $attempt -eq $max_attempts ]
+          do
+            echo "Health check attempt $attempt failed, retrying in 30 seconds..."
+            sleep 30
+            attempt=$((attempt + 1))
+          done
+          if [ $attempt -eq $max_attempts ]; then
+            echo "Health check failed after $max_attempts attempts"
+            exit 1
+          fi
+        timeout-minutes: 5
+
+      - name: Logout from Azure
+        if: always()
+        run: |
+          az logout
+          az cache purge
+          az account clear
