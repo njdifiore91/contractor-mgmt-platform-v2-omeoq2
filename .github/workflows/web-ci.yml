@@ -88,14 +88,14 @@ jobs:
           NODE_ENV: production
 
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: src/web/dist
           retention-days: 7
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
@@ -106,7 +106,7 @@ jobs:
           retention-days: 7
 
       - name: Upload Coverage Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: coverage-report
