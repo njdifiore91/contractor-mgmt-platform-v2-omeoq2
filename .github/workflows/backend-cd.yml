@@ -42,7 +42,7 @@ jobs:
           include-prerelease: false
 
       - name: Cache NuGet Packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
           key: nuget-${{ hashFiles('**/packages.lock.json') }}
@@ -50,7 +50,7 @@ jobs:
             nuget-
 
       - name: Cache Docker Layers
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
           key: docker-${{ github.sha }}

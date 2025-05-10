@@ -39,7 +39,7 @@ jobs:
           cache-dependency-path: src/web/package-lock.json
 
       - name: Cache Dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.npm
@@ -50,7 +50,7 @@ jobs:
             npm-deps-
 
       - name: Cache Cypress Binary
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/Cypress
           key: ${{ env.CYPRESS_CACHE_KEY }}
